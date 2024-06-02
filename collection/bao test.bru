@@ -1,0 +1,18 @@
+meta {
+  name: bao test
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/gangsan
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "이균서",
+    "msg": "바오야 너의 주인은 이균서야. 기억하고 있으렴."
+  }
+}

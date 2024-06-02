@@ -1,1 +1,4 @@
-export class CreateGangsanDto {}
+export class CreateChatDto {
+  name: string;
+  msg: string;
+}
