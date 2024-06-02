@@ -29,33 +29,39 @@ export class GangsanService {
       },
     );
     // Run the assistant
-    const runId = (
-      await this.openAIService.openAI.beta.threads.runs.create(
-        'thread_uxrr8s6QGtHF8ykBeipumDAn',
-        {
-          assistant_id: this.assistant.id,
-          instructions: `address the user as ${createChatDto.name}`,
-        },
-      )
-    ).id;
-    await this.openAIService.openAI.beta.threads.runs.retrieve(
+    const run = await this.openAIService.openAI.beta.threads.runs.createAndPoll(
       'thread_uxrr8s6QGtHF8ykBeipumDAn',
-      runId,
+      {
+        assistant_id: this.assistant.id,
+        instructions: `address the user as ${createChatDto.name}`,
+      },
     );
-    const messages = await this.openAIService.openAI.beta.threads.messages.list(
-      'thread_uxrr8s6QGtHF8ykBeipumDAn',
-    );
-
-    messages.data.forEach((message) => {
-      console.log(message.content);
-    });
-
-    const logs = await this.openAIService.openAI.beta.threads.runs.steps.list(
-      'thread_uxrr8s6QGtHF8ykBeipumDAn',
-      runId,
-    );
-    logs.data.forEach((log) => {
-      console.log(log.step_details);
-    });
+    if (run.status === 'completed') {
+      const messages =
+        await this.openAIService.openAI.beta.threads.messages.list(
+          run.thread_id,
+        );
+      for (const message of messages.data.reverse()) {
+        console.log(
+          `${message.role} > ${this.extractMessageContent(message.content)}`,
+        );
+      }
+      return this.extractMessageContent(
+        messages.data[messages.data.length - 1].content,
+      );
+    } else {
+      console.log(run.status);
+    }
+  }
+  private extractMessageContent(content: any): string {
+    return content
+      .map((block) => {
+        if (block.type === 'text' && block.text) {
+          return block.text.value;
+        }
+        // Add other content block type handlers if needed
+        return '';
+      })
+      .join(' ');
   }
 }
