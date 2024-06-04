@@ -45,9 +45,9 @@ export class GangsanService {
           `${message.role} > ${this.extractMessageContent(message.content)}`,
         );
       }
-      return `${createChatDto.name}님 안녕하세요! this.extractMessageContent(
+      return `${createChatDto.name}님 안녕하세요! ${this.extractMessageContent(
         messages.data[messages.data.length - 1].content,
-      )`;
+      )}`;
     } else {
       console.log(run.status);
     }
