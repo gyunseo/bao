@@ -35,7 +35,7 @@ export class GangsanService {
     }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
-      'thread_77dKgv06OKFU5wBj4DlcrWhg',
+      this.configService.get('THREAD_ID'),
       {
         role: 'user',
         content: createChatDto.msg,
@@ -43,7 +43,7 @@ export class GangsanService {
     );
     // Run the assistant
     const run = await this.openAIService.openAI.beta.threads.runs.createAndPoll(
-      'thread_uxrr8s6QGtHF8ykBeipumDAn',
+      this.configService.get('THREAD_ID'),
       {
         assistant_id: this.assistant.id,
         instructions: `address the user as ${createChatDto.name}`,
