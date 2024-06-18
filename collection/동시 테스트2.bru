@@ -1,0 +1,18 @@
+meta {
+  name: 동시 테스트2
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:3000/gangsan
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "이균서",
+    "msg": "안녕  바오야 너 주인이 누구니?"
+  }
+}
