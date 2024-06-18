@@ -27,9 +27,9 @@ export class GangsanService {
       return boardLists
         .map(
           (board, idx) =>
-            `${idx + 1}. ${board.category}${board.title}, ${board.link}\n`,
+            `${idx + 1}. ${board.category}${board.title}, ${board.link}\\n`,
         )
-        .join('\n');
+        .join('\\n');
     }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
