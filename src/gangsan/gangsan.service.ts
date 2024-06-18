@@ -3,6 +3,7 @@ import { OpenAI } from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIService } from 'src/open-ai/open-ai.service';
 import { CreateChatDto } from './dto/create-gangsan.dto';
+import { ScrapperService } from 'src/scrapper/scrapper.service';
 
 @Injectable()
 export class GangsanService {
@@ -10,6 +11,7 @@ export class GangsanService {
   constructor(
     private configService: ConfigService,
     private openAIService: OpenAIService,
+    private scrapperService: ScrapperService,
   ) {
     (async () => {
       // ... All async code here
@@ -19,6 +21,16 @@ export class GangsanService {
     })();
   }
   async createChat(createChatDto: CreateChatDto) {
+    if (createChatDto.msg.includes('공지사항')) {
+      const boardLists = await this.scrapperService.scrapeBoardLists();
+      // 1. [카테고리]제목, 링크 형태로 반환
+      return boardLists
+        .map(
+          (board, idx) =>
+            `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
+        )
+        .join('\n');
+    }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
       'thread_uxrr8s6QGtHF8ykBeipumDAn',
