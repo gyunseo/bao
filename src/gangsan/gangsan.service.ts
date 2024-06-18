@@ -30,7 +30,7 @@ export class GangsanService {
             (board, idx) =>
               `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
           )
-          .join('\n'),
+          .join('\n\n'),
       };
     }
     // create message
