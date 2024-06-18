@@ -35,7 +35,7 @@ export class GangsanService {
     }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
-      'thread_uxrr8s6QGtHF8ykBeipumDAn',
+      'thread_77dKgv06OKFU5wBj4DlcrWhg',
       {
         role: 'user',
         content: createChatDto.msg,
