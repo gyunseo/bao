@@ -14,8 +14,9 @@ redis-server
 npm ci
 npm run start:dev
 
-project root에 `.env` 파일을 만들어서 환경변수를 설정해주세요.
 ```
+
+project root에 `.env` 파일을 만들어서 환경변수를 설정해주세요.
 
 ```plaintext
 OPENAI_API_KEY=openai_api_key
