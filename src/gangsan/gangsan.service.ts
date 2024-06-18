@@ -29,7 +29,7 @@ export class GangsanService {
           (board, idx) =>
             `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
         )
-        .join('\\n');
+        .join('\n');
     }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
