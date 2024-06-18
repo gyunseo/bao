@@ -9,7 +9,7 @@ import * as Bull from 'bull';
 export class GangsanService implements OnModuleDestroy {
   private assistant: OpenAI.Beta.Assistant;
   private queue: Bull.Queue;
-
+  private readonly masterName;
   constructor(
     private configService: ConfigService,
     private openAIService: OpenAIService,
@@ -21,6 +21,7 @@ export class GangsanService implements OnModuleDestroy {
         this.configService.get('GANGSAN_ASST_ID'),
       );
     })();
+    this.masterName = this.configService.get('MASTER_NAME');
     const redisOptions = {
       host: this.configService.get('REDIS_HOST'), // Redis 서버 주소
       port: this.configService.get('REDIS_PORT'), // Redis 서버 포트
@@ -102,7 +103,7 @@ export class GangsanService implements OnModuleDestroy {
           );
         }
         return {
-          msg: `${createChatDto.name}님 안녕하세요! ${this.extractMessageContent(
+          msg: `${createChatDto.name === this.masterName ? '주인' : createChatDto.name}님 안녕하세요! ${this.extractMessageContent(
             messages.data[messages.data.length - 1].content,
           )}`,
         };
