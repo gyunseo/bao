@@ -27,7 +27,7 @@ export class GangsanService {
       return boardLists
         .map(
           (board, idx) =>
-            `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
+            `${idx + 1}. ${board.category}${board.title}, ${board.link}\n`,
         )
         .join('\n');
     }
