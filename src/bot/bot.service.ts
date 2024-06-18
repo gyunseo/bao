@@ -2,11 +2,11 @@ import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { OpenAI } from 'openai';
 import { ConfigService } from '@nestjs/config';
 import { OpenAIService } from 'src/open-ai/open-ai.service';
-import { CreateChatDto } from './dto/create-gangsan.dto';
+import { CreateChatDto } from './dto/create-chat.dto';
 import { ScrapperService } from 'src/scrapper/scrapper.service';
 import * as Bull from 'bull';
 @Injectable()
-export class GangsanService implements OnModuleDestroy {
+export class BotService implements OnModuleDestroy {
   private assistant: OpenAI.Beta.Assistant;
   private queue: Bull.Queue;
   private readonly masterName;
@@ -18,7 +18,7 @@ export class GangsanService implements OnModuleDestroy {
     (async () => {
       // ... All async code here
       this.assistant = await this.openAIService.openAI.beta.assistants.retrieve(
-        this.configService.get('GANGSAN_ASST_ID'),
+        this.configService.get('ASST_ID'),
       );
     })();
     this.masterName = this.configService.get('MASTER_NAME');
