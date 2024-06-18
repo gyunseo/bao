@@ -24,12 +24,14 @@ export class GangsanService {
     if (createChatDto.msg.includes('공지사항')) {
       const boardLists = await this.scrapperService.scrapeBoardLists();
       // 1. [카테고리]제목, 링크 형태로 반환
-      return boardLists
-        .map(
-          (board, idx) =>
-            `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
-        )
-        .join('\n');
+      return {
+        msg: boardLists
+          .map(
+            (board, idx) =>
+              `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
+          )
+          .join('\n'),
+      };
     }
     // create message
     await this.openAIService.openAI.beta.threads.messages.create(
@@ -57,9 +59,11 @@ export class GangsanService {
           `${message.role} > ${this.extractMessageContent(message.content)}`,
         );
       }
-      return `${createChatDto.name}님 안녕하세요! ${this.extractMessageContent(
-        messages.data[messages.data.length - 1].content,
-      )}`;
+      return {
+        msg: `${createChatDto.name}님 안녕하세요! ${this.extractMessageContent(
+          messages.data[messages.data.length - 1].content,
+        )}`,
+      };
     } else {
       console.log(run.status);
     }
