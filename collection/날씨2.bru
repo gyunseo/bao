@@ -1,0 +1,15 @@
+meta {
+  name: 날씨2
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:3000/scrapper/weather?location=서울
+  body: none
+  auth: none
+}
+
+params:query {
+  location: 서울
+}

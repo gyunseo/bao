@@ -1,0 +1,15 @@
+meta {
+  name: 날씨4
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:3000/scrapper/weather?location=대전
+  body: none
+  auth: none
+}
+
+params:query {
+  location: 대전
+}
