@@ -50,7 +50,7 @@ export class ScrapperService {
     const page = await browser.newPage();
 
     try {
-      const query = encodeURIComponent(`날씨 ${location}`);
+      const query = encodeURIComponent(`날씨+${location}`);
       const url = `https://m.search.naver.com/search.naver?&query=${query}`;
       console.log('Scraping weather from:', url);
       await page.goto(url);
