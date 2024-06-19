@@ -54,8 +54,6 @@ export class ScrapperService {
       const url = `https://m.search.naver.com/search.naver?&query=${query}`;
       console.log('Scraping weather from:', url);
       await page.goto(url);
-      // Wait for the weather information to be loaded
-      await page.waitForSelector('.weather_info');
 
       const weatherData = await page.evaluate(() => {
         const weatherInfo = document.querySelector('.weather_info');
