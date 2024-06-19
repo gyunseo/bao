@@ -61,6 +61,8 @@ export class ScrapperService {
       console.log('Scraping weather from:', url);
       await page.goto(url);
 
+      // Wait for the weather information to be loaded
+      await page.waitForSelector('.weather_info');
       const weatherData = await page.evaluate(() => {
         const weatherInfo = document.querySelector('.weather_info');
         if (!weatherInfo) {
