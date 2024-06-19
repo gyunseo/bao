@@ -48,7 +48,7 @@ export class ScrapperService {
   async scrapeWeather(location: string) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
+    console.log('Scraping weather for:', location);
     try {
       const query = encodeURIComponent(`날씨+${location}`);
       const url = `https://m.search.naver.com/search.naver?&query=${query}`;
