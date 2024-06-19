@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import puppeteer from 'puppeteer';
+import * as puppeteer from 'puppeteer';
 
 @Injectable()
 export class ScrapperService {
+  private browser: puppeteer.Browser;
+  constructor() {
+    // Initialize the puppeteer browser
+    (async () => {
+      // ... All async code here
+      this.browser = await puppeteer.launch();
+    })();
+  }
   async scrapeBoardLists() {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    const page = await this.browser.newPage();
 
     try {
       await page.goto('https://www.skku.edu/skku/campus/skk_comm/notice01.do');
@@ -41,10 +48,9 @@ export class ScrapperService {
       };
     } catch (error) {
       console.error('Error while scraping board lists:', error);
-    } finally {
-      await browser.close();
     }
   }
+
   async scrapeWeather(location: string) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -108,8 +114,6 @@ export class ScrapperService {
       };
     } catch (error) {
       console.error('Error while scraping weather:', error);
-    } finally {
-      await browser.close();
     }
   }
 }
