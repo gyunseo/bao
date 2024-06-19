@@ -31,9 +31,82 @@ export class ScrapperService {
       );
 
       console.log('Board Lists:', boardLists);
-      return boardLists;
+      return {
+        msg: boardLists
+          .map(
+            (board, idx) =>
+              `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
+          )
+          .join('\n\n'),
+      };
     } catch (error) {
       console.error('Error while scraping board lists:', error);
+    } finally {
+      await browser.close();
+    }
+  }
+  async scrapeWeather(location: string) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    try {
+      const query = encodeURIComponent(`날씨 ${location}`);
+      const url = `https://m.search.naver.com/search.naver?&query=${query}`;
+      await page.goto(url);
+
+      const weatherData = await page.evaluate(() => {
+        const weatherInfo = document.querySelector('.weather_info');
+        if (!weatherInfo) {
+          throw new Error('Weather info not found');
+        }
+
+        const today = weatherInfo.querySelector('._today');
+        if (!today) {
+          throw new Error('Today weather info not found');
+        }
+
+        // 현재 온도
+        const curTemp =
+          today
+            .querySelector('.temperature_text strong')
+            ?.textContent?.slice(5) || 'N/A';
+        // 어제와 온도차이
+        const diffTemp =
+          weatherInfo.querySelector('.temperature_info .temperature')
+            ?.textContent || 'N/A';
+        const diffStat =
+          weatherInfo.querySelector('.temperature_info .blind')?.textContent ||
+          'N/A';
+
+        // 체감
+        const feelTemp =
+          today.querySelectorAll('.summary_list .sort .desc')[0]?.textContent ||
+          'N/A';
+        // 습도
+        const humidity =
+          today.querySelectorAll('.summary_list .sort .desc')[1]?.textContent ||
+          'N/A';
+        // 풍속
+        const windSpeed =
+          today.querySelectorAll('.summary_list .sort .desc')[2]?.textContent ||
+          'N/A';
+
+        return {
+          curTemp,
+          diffTemp,
+          diffStat,
+          feelTemp,
+          humidity,
+          windSpeed,
+        };
+      });
+
+      console.log(`Weather in ${location}:`, weatherData);
+      return {
+        msg: `현재 ${location} 날씨는 ${weatherData.curTemp}이며, 어제보다 ${weatherData.diffTemp.replace('높아요', '')}${weatherData.diffStat}\n체감 온도는 ${weatherData.feelTemp}, 습도는 ${weatherData.humidity}, 풍속은 ${weatherData.windSpeed}에요!`,
+      };
+    } catch (error) {
+      console.error('Error while scraping weather:', error);
     } finally {
       await browser.close();
     }

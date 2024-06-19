@@ -60,19 +60,6 @@ export class BotService implements OnModuleDestroy {
     const { createChatDto } = job.data;
 
     try {
-      if (createChatDto.msg.includes('공지사항')) {
-        const boardLists = await this.scrapperService.scrapeBoardLists();
-        // 1. [카테고리]제목, 링크 형태로 반환
-        return {
-          msg: boardLists
-            .map(
-              (board, idx) =>
-                `${idx + 1}. ${board.category}${board.title}, ${board.link}`,
-            )
-            .join('\n\n'),
-        };
-      }
-
       // create message
       await this.openAIService.openAI.beta.threads.messages.create(
         this.configService.get('THREAD_ID'),
