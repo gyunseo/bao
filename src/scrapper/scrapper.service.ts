@@ -15,10 +15,7 @@ export class ScrapperService {
     const page = await this.browser.newPage();
 
     try {
-      await page.goto('https://www.skku.edu/skku/campus/skk_comm/notice01.do', {
-        timeout: 60000,
-        waitUntil: 'networkidle2',
-      });
+      await page.goto('https://www.skku.edu/skku/campus/skk_comm/notice01.do');
 
       // Get the details of the board lists
       const boardLists = await page.$$eval(
@@ -62,7 +59,7 @@ export class ScrapperService {
       const query = encodeURIComponent(`날씨+${location}`);
       const url = `https://m.search.naver.com/search.naver?&query=${query}`;
       console.log('Scraping weather from:', url);
-      await page.goto(url, { timeout: 60000, waitUntil: 'networkidle2' });
+      await page.goto(url);
 
       // Wait for the weather information to be loaded
       await page.waitForSelector('.weather_info');
