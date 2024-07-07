@@ -3,20 +3,16 @@ import * as puppeteer from 'puppeteer';
 
 @Injectable()
 export class ScrapperService {
-  constructor() {}
+  private browser: puppeteer.Browser;
+  constructor() {
+    // Initialize the puppeteer browser
+    (async () => {
+      // ... All async code here
+      this.browser = await puppeteer.launch();
+    })();
+  }
   async scrapeBoardLists() {
-    const browser = await puppeteer.launch({
-      headless: true,
-      ignoreHTTPSErrors: true,
-      args: [
-        '--disable-gpu',
-        '--disable-font-subpixel-positioning',
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-      ],
-    });
-    const page = await browser.newPage();
+    const page = await this.browser.newPage();
 
     try {
       await page.goto('https://www.skku.edu/skku/campus/skk_comm/notice01.do', {
@@ -55,9 +51,6 @@ export class ScrapperService {
       };
     } catch (error) {
       console.error('Error while scraping board lists:', error);
-    } finally {
-      await page.close();
-      await browser.close();
     }
   }
 
@@ -126,9 +119,6 @@ export class ScrapperService {
       };
     } catch (error) {
       console.error('Error while scraping weather:', error);
-    } finally {
-      await page.close();
-      await browser.close();
     }
   }
 }
